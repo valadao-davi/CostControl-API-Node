@@ -49,6 +49,28 @@ router.get('/:id', async (req, res) => {
   }
 })
 
+router.get('/category/:categoryId', async (req, res) => {
+  try {
+    const { categoryId } = req.params
+
+    const expenses = await prisma.expense.findMany({
+      where: {
+        categoryId: Number(categoryId)
+      },
+      include: {
+        category: true
+      }
+    })
+
+    res.json(expenses)
+
+  } catch (error) {
+    res.status(500).json({
+      error: error.message
+    })
+  }
+})
+
 router.post('/', async (req, res) => {
   try {
     const {
